@@ -1,0 +1,124 @@
+basePath: /api/v1
+definitions:
+  controllers.Post:
+    properties:
+      content:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  controllers.PostCreate:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: asliddintukhtasinov5@gmail.com
+    name: API Support
+    url: http://google.com
+  description: This is a simple CRUD app in golang for learning.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Simple CRUD app in golang
+  version: "1.0"
+paths:
+  /post:
+    get:
+      consumes:
+      - application/json
+      description: get posts
+      parameters:
+      - description: name search by q
+        format: title
+        in: query
+        name: q
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Post'
+      summary: List posts
+      tags:
+      - post
+    post:
+      consumes:
+      - application/json
+      description: add by json post
+      parameters:
+      - description: Add account
+        in: body
+        name: post
+        required: true
+        schema:
+          $ref: '#/definitions/controllers.PostCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Post'
+      summary: Add a post
+      tags:
+      - post
+  /post/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete post by ID
+      parameters:
+      - description: post ID
+        format: int64
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No Content
+          schema:
+            type: string
+      summary: Delete post
+      tags:
+      - post
+    get:
+      consumes:
+      - application/json
+      description: get post by ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.Post'
+      summary: Show an post
+      tags:
+      - post
+securityDefinitions:
+  ApiKeyAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -10,13 +10,26 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type PostCreate struct {
+	Title   string `db:"title" json:"title"`
+	Content string `db:"content" json:"content"`
+}
+
 type Post struct {
+	PostCreate
 	ID        int64     `db:"id" json:"id"`
-	Title     string    `db:"title" json:"title"`
-	Content   string    `db:"content" json:"content"`
 	CreatedAt time.Time `db:"created_at" json:"created_at"`
 }
 
+// AddPost godoc
+// @Summary      Add a post
+// @Description  add by json post
+// @Tags         post
+// @Accept       json
+// @Produce      json
+// @Param        post  body PostCreate  true  "Add account"
+// @Success      200   {object}  Post
+// @Router       /post [post]
 func CreatePost(c *gin.Context) {
 	var reqBody Post
 
@@ -47,12 +60,21 @@ func CreatePost(c *gin.Context) {
 			"id":         id,
 			"title":      reqBody.Title,
 			"content":    reqBody.Content,
-			"created_at": reqBody.CreatedAt,
+			"created_at": time.Now(),
 		},
 	})
 	return
 }
 
+// ListPostss godoc
+// @Summary      List posts
+// @Description  get posts
+// @Tags         post
+// @Accept       json
+// @Produce      json
+// @Param        q    query     string  false  "name search by q"  Format(title)
+// @Success      200  {object}  Post
+// @Router       /post [get]
 func GetPosts(c *gin.Context) {
 	var posts []Post
 
@@ -72,6 +94,15 @@ func GetPosts(c *gin.Context) {
 	return
 }
 
+// ShowPost godoc
+// @Summary      Show an post
+// @Description  get post by ID
+// @Tags         post
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "Post ID"
+// @Success      200  {object}  Post
+// @Router       /post/{id} [get]
 func GetPost(c *gin.Context) {
 	var singlePost Post
 	id := c.Param("id")
@@ -91,6 +122,15 @@ func GetPost(c *gin.Context) {
 	return
 }
 
+// DeletePost godoc
+// @Summary      Delete post
+// @Description  Delete post by ID
+// @Tags         post
+// @Accept       json
+// @Produce      json
+// @Param        id   path      int  true  "post ID"  Format(int64)
+// @Success      204  {string}  http.StatusOK
+// @Router       /post/{id} [delete]
 func DeletePost(c *gin.Context) {
 	id := c.Param("id")
 
